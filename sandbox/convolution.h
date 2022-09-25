@@ -10,60 +10,80 @@
 
 namespace we
 {
+  class system;
+
   class convolution
   {
   public:
+    enum channel_idx
+    {
+      e_ch_r,
+      e_ch_g,
+      e_ch_b,
+    };
     enum texture_idx
     {
       e_tex_conv,
     };
-    enum shader_idx
-    {
-      e_prog_conv,
-    };
 
   public:
     convolution(
+      system* system,
       const std::string& name,
+      channel_idx channel,
       std::uint32_t kernel_size,
       std::float_t kernel_offset,
       std::float_t kernel_distance,
-      std::float_t kernel_sharpness,
-      const std::array<std::float_t, 3>& time_delta_fixed,
-      const std::array<std::float_t, 3>& growth_height,
-      const std::array<std::float_t, 3>& growth_offset,
-      const std::array<std::float_t, 3>& growth_smoothness,
-      const std::array<std::float_t, 3>& growth_sharpness);
+      std::uint32_t kernel_sharpness,
+      std::float_t time_delta_fixed,
+      std::float_t growth_height,
+      std::float_t growth_offset,
+      std::float_t growth_smoothness,
+      std::uint32_t growth_sharpness);
 
   public:
-    void bind(std::uint32_t system_width, std::uint32_t system_height) const;
-    void ui();
+    inline const std::string& get_name() const { return m_name; }
+    inline channel_idx get_channel() const { return m_channel; }
 
-    void create_kernel();
-    void create_shader();
+    inline std::uint32_t get_kernel_size() const { return m_kernel_size; }
+    inline std::float_t get_kernel_offset() const { return m_kernel_offset; }
+    inline std::float_t get_kernel_distance() const { return m_kernel_distance; }
+    inline std::uint32_t get_kernel_sharpness() const { return m_kernel_sharpness; }
+    inline const std::vector<std::float_t>& get_kernel_values() const { return m_kernel_values; }
+
+    inline std::float_t get_time_delta_fixed() const { return m_time_delta_fixed; }
+
+    inline std::float_t get_growth_height() const { return m_growth_height; }
+    inline std::float_t get_growth_offset() const { return m_growth_offset; }
+    inline std::float_t get_growth_smoothness() const { return m_growth_smoothness; }
+    inline std::uint32_t get_growth_sharpness() const { return m_growth_sharpness; }
+
+  public:
+    void ui();
+    void rebuild_kernel();
 
   private:
+    std::float_t bump(std::float_t x);
+
+  private:
+    system* m_system{};
     std::string m_name{};
+    channel_idx m_channel{};
 
-    std::uint32_t m_kernel_size{ 15 };
-    std::float_t m_kernel_offset{ 14.0f };
-    std::float_t m_kernel_distance{ 74.0f };
-    std::float_t m_kernel_sharpness{ 4.0f };
+    std::uint32_t m_kernel_size{};
+    std::float_t m_kernel_offset{};
+    std::float_t m_kernel_distance{};
+    std::uint32_t m_kernel_sharpness{};
+    std::vector<std::float_t> m_kernel_values{};
 
-    std::array<std::float_t, 3> m_time_delta_fixed{ 0.05f, 0.05f, 0.05f };
+    std::float_t m_time_delta_fixed{};
 
-    std::array<std::float_t, 3> m_growth_height{ 2.0f, 2.0f, 2.0f };
-    std::array<std::float_t, 3> m_growth_offset{ 2.0f, 2.0f, 2.0f };
-    std::array<std::float_t, 3> m_growth_smoothness{ 2.0f, 2.0f, 2.0f };
-    std::array<std::float_t, 3> m_growth_sharpness{ 2.0f, 2.0f, 2.0f };
+    std::float_t m_growth_height{};
+    std::float_t m_growth_offset{};
+    std::float_t m_growth_smoothness{};
+    std::uint32_t m_growth_sharpness{};
 
-    //std::random_device m_random{};
-    //std::mt19937 m_generator{ m_random() };
-
-    std::vector<std::float_t> m_kernel{};
-
-    std::uint32_t m_textures[1]{};
-    std::uint32_t m_programs[1]{};
+    std::array<std::uint32_t, 1> m_textures{};
   };
 }
 

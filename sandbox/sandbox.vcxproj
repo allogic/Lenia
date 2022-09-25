@@ -151,7 +151,6 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="convolution.cpp" />
     <ClCompile Include="framebuffer.cpp" />
     <ClCompile Include="glad\glad.c" />
     <ClCompile Include="imgui\imgui.cpp" />
@@ -168,7 +167,6 @@
     <ClCompile Include="vao.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="convolution.h" />
     <ClInclude Include="framebuffer.h" />
     <ClInclude Include="glad\glad.h" />
     <ClInclude Include="glad\khrplatform.h" />
